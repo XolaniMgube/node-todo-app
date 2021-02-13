@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title%></title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+</head>
+
+<body>
+    <h1>Delete Details</h1>
+    <h2>Are You Sure You Want To Delete</h2>
+    <a class="delete" data-doc="<%= todo._id %>">Yes</a>
+    <a href="/" class="cancel">Cancel</a>
+
+
+ <script>
+     const trashcan = document.querySelector('a.delete');
+     trashcan.addEventListener('click', (e) => {
+         const endpoint = `/todo/${trashcan.dataset.doc}`
+         fetch(endpoint, {
+                 method: 'DELETE'
+             })
+             .then(response => response.json())
+             .then(data => window.location.href = data.redirect)
+             .catch(err => console.log(err))
+     });
+ </script>
+    
+</body>
+
+</html>

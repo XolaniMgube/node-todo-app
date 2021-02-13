@@ -1,20 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title%></title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <h1>Todo list app</h1>
 
-    <form action="/" method="POST">
+    <form action="/todos" method="POST">
         <input type="text" name="todo" id="todo" required>
         <button>Add</button>
     </form>
 
     <% const results = todos.forEach(todo => {%>
+    <a href="/todo/<%= todo._id%>" class="todos">
         <p><%= todo.todo%></p>
+        <a class="delete" data-doc="<%todo._id %>"><button>delete</button></a>
+    </a>
+
     <%})%>
+
+   
 </body>
+
 </html>
