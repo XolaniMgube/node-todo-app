@@ -11,12 +11,14 @@ const dbURI =
   "mongodb+srv://xolani:njabs12345@nodetuts.qk2xo.mongodb.net/todo-app?retryWrites=true&w=majority";
   mongoose
     .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then((result) => app.listen(3001))
+    .then((result) => app.listen(3001, () => console.log("listening of port 3001")))
     .catch((err) => console.log(err));
 
 app.set('view engine', 'ejs')
 
 app.use(express.urlencoded({ extended: true })) // for getting data from the form to the post request
+
+app.use(express.static('public'))
 
 
 
@@ -27,17 +29,31 @@ app.get('/', (req, res) => {
   
 })
 
-// app.get('/todo', (req, res) => {
-//   const todo = new Todo({
-//     todo: "hi Im xolani"
-//   })
-//   res.send(todo)
-// })
+app.get('/todo/:id', (req, res) => {
+  const id = req.params.id
+  Todo.findById(id)
+  .then(result => {
+    console.log(result)
+    res.render('details', {title: "Details Details", todo: result})
+  })
+})
 
-app.post('/', (req, res) => {
+app.delete('/todo/:id', (req, res) => {
+  const id = req.params.id
+  console.log(id)
+  Todo.findByIdAndDelete(id) 
+    .then(result => {
+      res.json({ redirect: '/'})
+    })
+    .catch(err => console.log(err))
+  
+})
+
+
+app.post('/todos', (req, res) => {
   console.log(req.body)
   const todo = new Todo(req.body)
-  todo.save().sort({ createdAt: -1 })
+  todo.save() //.sort({ createdAt: -1 })
     .then(result => res.redirect('/'))
     .catch(err => console.log(err))
 })
